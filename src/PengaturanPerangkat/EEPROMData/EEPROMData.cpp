@@ -1,9 +1,9 @@
-#include "Pengaturan.h"
+#include "EEPROMData.h"
 #include <Arduino.h>
 #include <EEPROM.h>
 
 //Private
-  String Pengaturan::readData(int start, int length){
+  String EEPROMData::readData(int start, int length){
     /*
     Spesifikasi :
     - Fungsi ini digunakan untuk membaca data dari EPROM
@@ -20,7 +20,7 @@
     return data;
   }
 
-  void Pengaturan::writeData(String data, int start, int length){
+  void EEPROMData::writeData(String data, int start, int length){
     /*
     Spesifikasi :
     - Prosedur ini digunakan untuk menulis data ke EPROM.
@@ -41,7 +41,7 @@
 //------------------------------------------------------------------------------
 
 //Public
-void Pengaturan::begin(){
+void EEPROMData::begin(){
   /*
   Spesifikasi :
   - Prosedur ini digunakan untuk inisialisasi EPROM sebelum dilakukan pembacaan dan penulisan data.
@@ -50,7 +50,7 @@ void Pengaturan::begin(){
   EEPROM.begin(1000);
 }
 
-String Pengaturan::readWifiSSID(){
+String EEPROMData::readWifiSSID(){
   /*
   Spesifikasi :
   - Fungsi ini digunakan untuk membaca Wi-Fi SSID.
@@ -60,7 +60,7 @@ String Pengaturan::readWifiSSID(){
   return readData(start_index + (data_length * 0), data_length);
 }
 
-String Pengaturan::readWifiPassword(){ 
+String EEPROMData::readWifiPassword(){ 
   /*
   Spesifikasi :
   - Fungsi ini digunakan untuk membaca Wi-Fi Password.
@@ -70,7 +70,7 @@ String Pengaturan::readWifiPassword(){
   return readData(start_index + (data_length * 1), data_length);
 }
 
-String Pengaturan::readMQTTBroker(){ 
+String EEPROMData::readMQTTBroker(){ 
   /*
   Spesifikasi :
   - Fungsi ini digunakan untuk membaca alamat MQQT Broker.
@@ -80,7 +80,7 @@ String Pengaturan::readMQTTBroker(){
   return readData(start_index + (data_length * 2), data_length);
 }
 
-String Pengaturan::readMQTTUsername(){ 
+String EEPROMData::readMQTTUsername(){ 
   /*
   Spesifikasi :
   - Fungsi ini digunakan untuk membaca alamat MQQT Username.
@@ -90,7 +90,7 @@ String Pengaturan::readMQTTUsername(){
   return readData(start_index + (data_length * 3), data_length);
 }
 
-String Pengaturan::readMQTTPassword(){ 
+String EEPROMData::readMQTTPassword(){ 
   /*
   Spesifikasi :
   - Fungsi ini digunakan untuk membaca alamat MQQT Password.
@@ -100,7 +100,7 @@ String Pengaturan::readMQTTPassword(){
   return readData(start_index + (data_length * 4), data_length);
 }
 
-String Pengaturan::readUsername(){ 
+String EEPROMData::readUsername(){ 
   /*
   Spesifikasi :
   - Fungsi ini digunakan untuk membaca Username.
@@ -110,7 +110,7 @@ String Pengaturan::readUsername(){
   return readData(start_index + (data_length * 5), data_length);
 }
 
-String Pengaturan::readPassword(){
+String EEPROMData::readPassword(){
   /*
   Spesifikasi :
   - Fungsi ini digunakan untuk membaca Password.
@@ -120,7 +120,7 @@ String Pengaturan::readPassword(){
   return readData(start_index + (data_length * 6), data_length);
 }
 
-void Pengaturan::writeWifiSSID(String data){
+void EEPROMData::writeWifiSSID(String data){
   /*
   Spesifikasi :
   - Prosedur ini digunakan untuk menulis Wi-Fi SSID ke EPROM.
@@ -129,7 +129,7 @@ void Pengaturan::writeWifiSSID(String data){
   return writeData(data, start_index + (data_length * 0), data_length);
 }
 
-void Pengaturan::writeWifiPassword(String data){
+void EEPROMData::writeWifiPassword(String data){
   /*
   Spesifikasi :
   - Prosedur ini digunakan untuk menulis Wi-Fi Password ke EPROM.
@@ -138,7 +138,7 @@ void Pengaturan::writeWifiPassword(String data){
   return writeData(data, start_index + (data_length * 1), data_length);
 }
 
-void Pengaturan::writeMQTTBroker(String data){
+void EEPROMData::writeMQTTBroker(String data){
   /*
   Spesifikasi :
   - Prosedur ini digunakan untuk menulis alamat MQTT Broker ke EPROM.
@@ -147,7 +147,7 @@ void Pengaturan::writeMQTTBroker(String data){
   return writeData(data, start_index + (data_length * 2), data_length);
 }
 
-void Pengaturan::writeMQTTUsername(String data){
+void EEPROMData::writeMQTTUsername(String data){
   /*
   Spesifikasi :
   - Prosedur ini digunakan untuk menulis MQTT Username ke EPROM.
@@ -156,7 +156,7 @@ void Pengaturan::writeMQTTUsername(String data){
   return writeData(data, start_index + (data_length * 3), data_length);
 }
 
-void Pengaturan::writeMQTTPassword(String data){
+void EEPROMData::writeMQTTPassword(String data){
   /*
   Spesifikasi :
   - Prosedur ini digunakan untuk menulis MQTT Password ke EPROM.
@@ -165,7 +165,7 @@ void Pengaturan::writeMQTTPassword(String data){
   return writeData(data, start_index + (data_length * 4), data_length);
 }
 
-void Pengaturan::writeUsername(String data){
+void EEPROMData::writeUsername(String data){
   /*
   Spesifikasi :
   - Prosedur ini digunakan untuk menulis Username ke EPROM.
@@ -174,7 +174,7 @@ void Pengaturan::writeUsername(String data){
   return writeData(data, start_index + (data_length * 5), data_length);
 }
 
-void Pengaturan::writePassword(String data){
+void EEPROMData::writePassword(String data){
   /*
   Spesifikasi :
   - Prosedur ini digunakan untuk menulis Password ke EPROM.

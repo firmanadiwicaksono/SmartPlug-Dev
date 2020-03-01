@@ -3,19 +3,20 @@
 #include <WiFiAP.h>
 #include <WebServer.h>
 #include "PubSubClient.h"
-#include "FirmwareCrypt/FirmwareCrypt.h"
-#include "HTMLForm/HTMLForm.h"
-#include "Pengaturan/Pengaturan.h"
-#include "LedRGB/LedRGB.h"
-#include "Relay/Relay.h"
-#include "DigitalSensor/DigitalSensor.h"
+#include "UpdateFirmwareViaSDCard/FirmwareCrypt/FirmwareCrypt.h"
+#include "PengaturanPerangkat/HTMLForm/HTMLForm.h"
+#include "PengaturanPerangkat/EEPROMData/EEPROMData.h"
+#include "Sensor/DigitalSensor/DigitalSensor.h"
+#include "Aktuator/LedRGB/LedRGB.h"
+#include "Aktuator/Relay/Relay.h"
+
 
 const char *ap_ssid = "Smart_Plug_Device";
 const char *ap_password = "";
 
 WebServer server(80);
 HTMLForm form;
-Pengaturan pengaturan;
+EEPROMData pengaturan;
 
 WiFiClient espClient;
 PubSubClient MQTT(espClient);
@@ -23,9 +24,9 @@ PubSubClient MQTT(espClient);
 FirmwareCrypt firmware_update;
 TaskHandle_t firmware_crypt_task;
 
+DigitalSensor jumper(34);
 LedRGB led(13, 27, 36, 0, 1, 2);
 Relay relay(16, 17);
-DigitalSensor jumper(34);
 
 bool can_restart;
 bool execute_main;

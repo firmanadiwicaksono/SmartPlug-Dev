@@ -1,9 +1,9 @@
-#ifndef Pengaturan_h
-#define Pengaturan_h
+#ifndef EEPROMData_h
+#define EEPROMData_h
 
 #include <Arduino.h>
 
-class Pengaturan{
+class EEPROMData{
 private:
   const int start_index = 0;
   const int data_length = 32;
