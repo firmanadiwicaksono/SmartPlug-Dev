@@ -33,4 +33,3 @@ deploy:
   file: ".pio/build/esp32_deploy/firmware.bin"
   on:
     repo: firmanadiwicaksono/SmartPlug-Dev
-    branch: ''
