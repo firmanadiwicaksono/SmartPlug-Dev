@@ -18,7 +18,7 @@
       - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%y%m%d%H%M%S')}
       
       script:
-      - platformio run -e esp32_deploy
+      - platformio run -e esp32dev
       - platformio --version
       
 deploy:
