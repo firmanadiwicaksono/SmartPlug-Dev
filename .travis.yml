@@ -1,25 +1,27 @@
-    language: python
-    python:
-      - '2.7'
-    sudo: false
-    cache:
-      directories:
-      - "~/.platformio"
-    env:
-    - PLATFORMIO_CI_SRC=src/
-      
-    before_install:
-    - export TZ=Asia/Jakarta
-      
-      
-    install:
-    - pip install -U platformio
-    - platformio update 
-    - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%y%m%d%H%M%S')}
-      
-    script:
-    - platformio run -e esp32dev_deploy
-    - platformio --version
+language: python
+python:
+- '2.7'
+sudo: false
+cache:
+  directories:
+  - "~/.platformio"
+env:
+- PLATFORMIO_CI_SRC=src/
+
+before_install:
+- export TZ=Asia/Jakarta
+
+
+
+install:
+- pip install -U platformio
+- platformio update 
+- export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%y%m%d%H%M%S')}
+
+script:
+- platformio run -e esp32_deploy
+- platformio --version
+ 
       
 deploy:
   on:
