@@ -10,7 +10,6 @@
 #include "Aktuator/LedRGB/LedRGB.h"
 #include "Aktuator/Relay/Relay.h"
 
-
 const char *ap_ssid = "Smart_Plug_Device";
 const char *ap_password = "";
 
