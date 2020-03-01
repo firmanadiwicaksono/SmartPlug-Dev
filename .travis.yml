@@ -11,8 +11,6 @@ env:
 before_install:
 - export TZ=Asia/Jakarta
 
-
-
 install:
 - pip install -U platformio
 - platformio update 
@@ -21,8 +19,7 @@ install:
 script:
 - platformio run -e esp32dev_deploy
 - platformio --version
- 
-      
+       
 deploy:
   on:
     all_branches: true
@@ -33,4 +30,3 @@ deploy:
   api_key:
     secure: r3Pw5Yy+zvJ1rSiwr/wMaFka/k14y50ha/dZJ2L3GeMy4rHhvRwGWSLZdHHZ7gW7QRnube6pfFA4crUKZQP9s+3vW1oemg5jPgu+DGAwv7sXmeI3b0WJe5RODbA2IRukFTCziuYNXNs2kBw5WUNQtM0VD3Xt+MeQROpEbEWgWM6qMJEnuyMOGoMvDAiECl+vUdYVAAefAUbhnhuuGRVXyDha0FZTw/3nzr2F5rUAXVeuCLvVBC2H6luFkcgHlDoCzvt9Tvu/GDGX3UpZvDpxJEZgHaPkRGiWvp393d2Ozzda73QJfJ4m8N4t2W7owilSVz3TO51aqQGNbKdoHAZuvPgMqqJgDLJZQIUoXhxg+uwIJW2R+hBxbvsnVhdWBYn89r5lGzI+vQMwMRe/Td5uHyqg5Z0u3f6R0xTTrsi8BmmWC26OksdgmJAwY/tqpgjybwi9rOzTBInXFwLWpm38NOnrx7ppFlStJE1sMUV8Gk94CASTyxeAmnnSVWG7rho0DeOCe7cbjv3U8MNuWNYlgmm6HrqU/xZJpqq+4bRrWDlZHAG8TFdLliKD1qYLEklmb04JUWick1KXjrTHjpuwLxQUZZGV5hiDzZRpHV4pC+QHM5py2//Kf78dlBqINqBCZQsyb0mA5p+U2m42v7Z32TSNvdQMnscv1rzki/YI1vY=
   file: ".pio/build/esp32dev_deploy/firmware.bin"
-

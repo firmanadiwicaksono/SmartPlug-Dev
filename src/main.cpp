@@ -518,7 +518,7 @@ void loop(){
           ESP.restart();
         }
       }
-      delay(10);  
+      delay(5);  
     }
   }else{
     while(true){
