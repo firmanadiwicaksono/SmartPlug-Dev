@@ -23,9 +23,9 @@ script:
 deploy:
   on:
     all_branches: true
-    name: unstable
-    repo: firmanadiwicaksono/SmartPlug-Dev
+  name: unstable
   skip_cleanup: true
+  repo: firmanadiwicaksono/SmartPlug-Dev
   provider: releases
   overwrite: true
   api_key:
