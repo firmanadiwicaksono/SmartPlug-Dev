@@ -23,6 +23,7 @@ script:
 deploy:
   on:
     all_branches: true
+    name: unstable
     repo: firmanadiwicaksono/SmartPlug-Dev
   skip_cleanup: true
   provider: releases
