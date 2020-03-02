@@ -2,7 +2,7 @@
 #include <WiFi.h>
 #include <WiFiAP.h>
 #include <WebServer.h>
-#include "PubSubClient.h"
+#include "../lib/MQTT/PubSubClient.h"
 #include "UpdateFirmwareViaSDCard/FirmwareCrypt/FirmwareCrypt.h"
 #include "PengaturanPerangkat/HTMLForm/HTMLForm.h"
 #include "PengaturanPerangkat/EEPROMData/EEPROMData.h"
@@ -24,7 +24,7 @@ FirmwareCrypt firmware_update;
 TaskHandle_t firmware_crypt_task;
 
 DigitalSensor jumper(34);
-LedRGB led(13, 27, 36, 0, 1, 2);
+LedRGB led(13, 27, 26, 0, 1, 2);
 Relay relay(16, 17);
 
 bool can_restart;

@@ -118,7 +118,7 @@ void LedRGB::rainbow(int delayStep){
 
   float R, G, B;
   for(int i = 0; i <= 360; i++){
-    HSVtoRGB(i, 100, 100, R, G, B);
+    HSVtoRGB(i, 1, 1, R, G, B);
     setRGB((int)(R * 255), (int)(G * 255), (int)(B * 255));
     delay(delayStep);
   }

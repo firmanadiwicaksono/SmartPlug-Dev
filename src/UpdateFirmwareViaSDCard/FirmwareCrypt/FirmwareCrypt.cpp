@@ -28,8 +28,8 @@
 
 #include "FirmwareCrypt.h"
 #include "FirmwareInformation/FirmwareInformation.h"
-#include "AES.h"
-#include "sha256.h"
+#include "../lib/AES/AES.h"
+#include "../lib/SHA256/sha256.h"
 #include <Arduino.h>
 #include <Update.h>
 #include <SD.h>
