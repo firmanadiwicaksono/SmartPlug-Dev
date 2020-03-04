@@ -22,10 +22,10 @@ public:
   EnergySensor(int cfPin, int cf1Pin, int selPin);
   void calibrate(int expectedActivePower, int expectedVoltage);
   void read();
-  int getActivePower(); //W
-  int getVoltage(); //V
-  double getCurrent(); //A
-  int getApparentPower(); //VA
+  int getActivePower();
+  int getVoltage();
+  double getCurrent();
+  int getApparentPower();
   double getPowerFactor();
 };
 

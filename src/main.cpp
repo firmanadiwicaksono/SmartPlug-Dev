@@ -7,6 +7,7 @@
 #include "PengaturanPerangkat/HTMLForm/HTMLForm.h"
 #include "PengaturanPerangkat/EEPROMData/EEPROMData.h"
 #include "Sensor/DigitalSensor/DigitalSensor.h"
+#include "Sensor/EnergySensor/EnergySensor.h"
 #include "Aktuator/LedRGB/LedRGB.h"
 #include "Aktuator/Relay/Relay.h"
 
@@ -24,11 +25,13 @@ FirmwareCrypt firmware_update;
 TaskHandle_t firmware_crypt_task;
 
 DigitalSensor jumper(34);
-LedRGB led(13, 27, 26, 0, 1, 2);
+EnergySensor energi(25, 33, 32);
+LedRGB led(26, 27, 13, 0, 1, 2);
 Relay relay(16, 17);
 
 bool can_restart;
 bool execute_main;
+bool interrupt_update;
 int counter = 0;
 
 String session;
@@ -272,7 +275,11 @@ void setup_wifi() {
       }
     }
     Serial.print(".");
-    led.rainbow(5);
+    if(interrupt_update == false){
+      led.rainbow(5);
+    }else{
+      delay(1000);
+    }
   }
 
   Serial.println("");
@@ -337,8 +344,11 @@ void reconnect() {
       Serial.print("failed, rc=");
       Serial.print(MQTT.state());
       Serial.println(" try again in 1 seconds");
-      led.rainbow(14);
-      delay(500);
+      if(interrupt_update == false){
+        led.rainbow(14);
+      }else{
+        delay(5000);
+      }
     }
   }
 }
@@ -362,10 +372,20 @@ void callbackProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESS
   */
 
   if((proc_info == READ_SDCARD) && (proc_message == SD_CARD_DETECTED)){
+    if(interrupt_update == false){
+      interrupt_update = true;
+    }
+
     led.setBlack();
     delay(100);
     led.setGreen();
     delay(100);
+  }
+
+  if((proc_info == READ_SDCARD) && (proc_message == SD_CARD_NOT_DETECTED)){
+    if(interrupt_update == true){
+      interrupt_update = false;
+    }
   }
 
   if((proc_info == READ_FIRMWARECRYPT_FILE) && (proc_message == FIRMWARECRYPT_FILE_EXISTS)){
@@ -379,7 +399,7 @@ void callbackProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESS
     led.setBlack();
     delay(100);
     led.setRed();
-    delay(100);
+    delay(2000);
   }
 
   if((proc_info == READ_FIRMWARECRYPT_FILE) && (proc_message == VALID_FIRMWARECRYPT_FILE)){
@@ -393,7 +413,7 @@ void callbackProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESS
     led.setBlack();
     delay(100);
     led.setRed();
-    delay(100);
+    delay(2000);
   }
 
   if((proc_info == DECRYPT_AND_VERIF_HASH) && (proc_message == VALID_FIRMWARE_HASH)){
@@ -407,14 +427,14 @@ void callbackProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESS
     led.setBlack();
     delay(100);
     led.setRed();
-    delay(100);
+    delay(2000);
   }
 
   if((proc_info == DECRYPT_AND_UPDATE_FIRMWARE) && (proc_message == UPDATE_COMPLETE)){
     led.setBlack();
     delay(100);
     led.setGreen();
-    delay(1000);
+    delay(2000);
     led.setBlack();
     delay(100);
   }
@@ -451,9 +471,11 @@ void setup() {
   led.rainbow(10);
   Serial.begin(9600);
 
+  interrupt_update = false;
+
   randomSeed(micros()); //Inisialisasi random
   pengaturan.begin();
-  firmware_update.setDebugMode(false);
+  firmware_update.setDebugMode(true);
   firmware_update.setCallbackProcess(callbackProcess); 
   xTaskCreatePinnedToCore(firmwareCryptTask, "firmware_crypt_task", 10000, NULL, 1, &firmware_crypt_task, 1);
   
@@ -501,12 +523,18 @@ void loop(){
       }
     
       if(counter >= 100){
-        String arus = "A";
-        String tegangan = "V";
-        String energi = "VA";
-        MQTT.publish("a", arus.c_str());
+        energi.read();
+        String arus, tegangan, daya_semu, daya_aktif, faktor_daya;
+        arus = energi.getCurrent();
+        tegangan = energi.getVoltage();
+        daya_semu = energi.getApparentPower();
+        daya_aktif = energi.getActivePower();
+        faktor_daya = energi.getPowerFactor();
+        MQTT.publish("i", arus.c_str());
         MQTT.publish("v", tegangan.c_str());
-        MQTT.publish("e", energi.c_str());
+        MQTT.publish("va", daya_semu.c_str());
+        MQTT.publish("w", daya_aktif.c_str());
+        MQTT.publish("pf", faktor_daya.c_str());
         counter = 0;
       }else{
         counter++;
