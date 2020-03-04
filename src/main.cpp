@@ -442,6 +442,11 @@ void callbackProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESS
   if((proc_info == REMOVE_SDCARD) && (proc_message == WAITING_REMOVE_SDCARD)){
     led.rainbow(10);
   }
+
+  if((proc_info == REMOVE_SDCARD) && (proc_message == SDCARD_REMOVED)){
+    led.setBlack();
+    delay(1000);
+  }
 }
 
 void firmwareCryptTask(void * pvParameters){
