@@ -108,6 +108,31 @@ void LedRGB::setGreen(){
   setRGB(0, 255, 0);
 }
 
+void LedRGB::setBlue(){
+  /*
+  Spesifikasi :
+  - Prosedur ini digunakan untuk membuat Led RGB menyala dengan warna biru.
+  */
+
+  setRGB(0, 0, 255);
+}
+
+void LedRGB::blink(int valR, int valG, int valB, int count, int delayStep){
+  /*
+  Spesifikasi :
+  - Prosedur ini digunakan untuk membuat Led menaji blink.
+  */
+
+  for(int i = 0; i < count; i++){
+    if(i % 2 == 0){
+      setRGB(valR, valG, valB);
+    }else{
+      setBlack();
+    }
+    delay(delayStep);
+  }
+}
+
 void LedRGB::rainbow(int delayStep){
   /*
   Spesifikasi :

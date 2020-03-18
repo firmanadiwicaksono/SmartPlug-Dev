@@ -18,6 +18,8 @@ public:
   void setBlack();
   void setRed();
   void setGreen();
+  void setBlue();
+  void blink(int valR, int valG, int valB, int count, int delayStep);
   void rainbow(int delayStep);
 };
 

@@ -52,6 +52,8 @@ enum FIRMWARECRYPT_PROCESS_MESSAGE{
   FIRMWARECRYPT_FILE_EXISTS,
   VALID_FIRMWARECRYPT_FILE,
   INVALID_FIRMWARECRYPT_FILE,
+  FIRMWARE_TYPE_UPDATE_VERSION,
+  FIRMWARE_TYPE_ROLLBACK_VERSION,
 
   VALID_FIRMWARE_HASH,
   INVALID_FIRMWARE_HASH,
@@ -63,7 +65,8 @@ enum FIRMWARECRYPT_PROCESS_MESSAGE{
   SDCARD_REMOVED
 };
 
-#define FIRMWARECRYPT_CALLBACK_SIGNATURE void (*callback)(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESSAGE proc_message, String message)
+#define FIRMWARECRYPT_CALLBACK_UPDATE_SIGNATURE void (*callbackUpdate)(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESSAGE proc_message, String message)
+#define FIRMWARECRYPT_CALLBACK_ROLLBACK_SIGNATURE void (*callbackRollback)(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESSAGE proc_message, String message)
 
 class FirmwareCrypt{
 private:
@@ -71,7 +74,9 @@ private:
   const String firmware_filename = "/firmware.firmwarecrypt_";
   const int aes_block_size = 64;
   bool debug_mode;
-  FIRMWARECRYPT_CALLBACK_SIGNATURE;
+  FIRMWARECRYPT_CALLBACK_UPDATE_SIGNATURE;
+  FIRMWARECRYPT_CALLBACK_ROLLBACK_SIGNATURE;
+  
   String partFile(int part);
   void AES256Decrypt(byte* cipher, byte* plain, const byte* key, const byte* iv);
     
@@ -83,9 +88,11 @@ public:
   String getFirmwareVersion();
   String getLegalCopyright();
   String getCompanyName();
+  String getFirmwareType();
   void setDebugMode(bool debug_mode);
-  void setCallbackProcess(FIRMWARECRYPT_CALLBACK_SIGNATURE);
+  void setCallbackProcess(FIRMWARECRYPT_CALLBACK_UPDATE_SIGNATURE, FIRMWARECRYPT_CALLBACK_ROLLBACK_SIGNATURE);
   void handleUpdate();
+  void handleRollback();
 };
 
 #endif

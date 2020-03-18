@@ -13,7 +13,7 @@
     String data = "";
     for(int i = 0; i < length; i++){
       byte x = EEPROM.read(start + i);
-      if(x != 0){
+      if((x != 0) && (x != 255)){
         data += (char)x;
       }
     }

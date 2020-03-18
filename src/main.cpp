@@ -355,7 +355,7 @@ void reconnect() {
 //------------------------------------------------------------------------------
 
 //FirmwareCrypt
-void callbackProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESSAGE proc_message, String message){
+void callbackUpdateProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESSAGE proc_message, String message){
   /*
   Spesifikasi :
   - Prosedur ini memberikan informasi proses update firmware via SD Card, sehingga pengguna dapat memantau
@@ -365,6 +365,8 @@ void callbackProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESS
   - FIRMWARECRYPT_FILE_NOT_EXISTS = Apabila firmware tidak ditemukan di SD Card.
   - VALID_FIRMWARECRYPT_FILE = Apabila firmware sesuai.
   - INVALID_FIRMWARECRYPT_FILE = Apabila firmware tidak sesuai.
+  - FIRMWARE_TYPE_UPDATE_VERSION = file firmware digunakan untuk update firmware terbaru.
+  - FIRMWARE_TYPE_ROLLBACK_VERSION = file firmware digunakan untuk kembali ke versi firmware awal (release 1).
   - VALID_FIRMWARE_HASH = Apabila firmware tidak mengalami corrupt data.
   - INVALID_FIRMWARE_HASH = Apabila firmware mengalami corrupt data.
   - UPDATE_COMPLETE = Apabila proses update telah selesai.
@@ -378,8 +380,7 @@ void callbackProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESS
 
     led.setBlack();
     delay(100);
-    led.setGreen();
-    delay(100);
+    led.rainbow(5);
   }
 
   if((proc_info == READ_SDCARD) && (proc_message == SD_CARD_NOT_DETECTED)){
@@ -391,21 +392,21 @@ void callbackProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESS
   if((proc_info == READ_FIRMWARECRYPT_FILE) && (proc_message == FIRMWARECRYPT_FILE_EXISTS)){
     led.setBlack();
     delay(100);
-    led.setGreen();
+    led.rainbow(5);
     delay(100);
   }
 
   if((proc_info == READ_FIRMWARECRYPT_FILE) && (proc_message == FIRMWARECRYPT_FILE_NOT_EXISTS)){
     led.setBlack();
     delay(100);
-    led.setRed();
+    led.rainbow(5);
     delay(2000);
   }
 
   if((proc_info == READ_FIRMWARECRYPT_FILE) && (proc_message == VALID_FIRMWARECRYPT_FILE)){
     led.setBlack();
     delay(100);
-    led.setGreen();
+    led.rainbow(5);
     delay(100);
   }
 
@@ -414,6 +415,17 @@ void callbackProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESS
     delay(100);
     led.setRed();
     delay(2000);
+  }
+
+  if(proc_info == READ_FIRMWARECRYPT_FILE){
+    if(proc_message == FIRMWARE_TYPE_UPDATE_VERSION){
+      led.setBlack();
+      delay(100);
+      led.blink(0, 255, 0, 10, 100);
+    }else{
+      led.setBlack();
+      delay(100);
+    }
   }
 
   if((proc_info == DECRYPT_AND_VERIF_HASH) && (proc_message == VALID_FIRMWARE_HASH)){
@@ -449,6 +461,112 @@ void callbackProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESS
   }
 }
 
+void callbackRollbackProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCESS_MESSAGE proc_message, String message){
+  /*
+  Spesifikasi :
+  - Prosedur ini memberikan informasi proses rollback firmware via SD Card, sehingga pengguna dapat memantau
+    proses update firmware perangkat.
+  - SD_CARD_DETECTED = Ketika pengguna memasang SD Card.
+  - FIRMWARECRYPT_FILE_EXISTS = Apabila firmware ditemukan di SD Card.
+  - FIRMWARECRYPT_FILE_NOT_EXISTS = Apabila firmware tidak ditemukan di SD Card.
+  - VALID_FIRMWARECRYPT_FILE = Apabila firmware sesuai.
+  - INVALID_FIRMWARECRYPT_FILE = Apabila firmware tidak sesuai.
+  - FIRMWARE_TYPE_UPDATE_VERSION = file firmware digunakan untuk update firmware terbaru.
+  - FIRMWARE_TYPE_ROLLBACK_VERSION = file firmware digunakan untuk kembali ke versi firmware awal (release 1).
+  - VALID_FIRMWARE_HASH = Apabila firmware tidak mengalami corrupt data.
+  - INVALID_FIRMWARE_HASH = Apabila firmware mengalami corrupt data.
+  - UPDATE_COMPLETE = Apabila proses update telah selesai.
+  - WAITING_REMOVE_SDCARD = Menunggu pengguna melepas SD Card.
+  */
+
+  if((proc_info == READ_SDCARD) && (proc_message == SD_CARD_DETECTED)){
+    if(interrupt_update == false){
+      interrupt_update = true;
+    }
+
+    led.setBlack();
+    delay(100);
+    led.rainbow(5);
+  }
+
+  if((proc_info == READ_SDCARD) && (proc_message == SD_CARD_NOT_DETECTED)){
+    if(interrupt_update == true){
+      interrupt_update = false;
+    }
+  }
+
+  if((proc_info == READ_FIRMWARECRYPT_FILE) && (proc_message == FIRMWARECRYPT_FILE_EXISTS)){
+    led.setBlack();
+    delay(100);
+    led.rainbow(5);
+    delay(100);
+  }
+
+  if((proc_info == READ_FIRMWARECRYPT_FILE) && (proc_message == FIRMWARECRYPT_FILE_NOT_EXISTS)){
+    led.setBlack();
+    delay(100);
+    led.rainbow(5);
+    delay(2000);
+  }
+
+  if((proc_info == READ_FIRMWARECRYPT_FILE) && (proc_message == VALID_FIRMWARECRYPT_FILE)){
+    led.setBlack();
+    delay(100);
+    led.rainbow(5);
+    delay(100);
+  }
+
+  if((proc_info == READ_FIRMWARECRYPT_FILE) && (proc_message == INVALID_FIRMWARECRYPT_FILE)){
+    led.setBlack();
+    delay(100);
+    led.setRed();
+    delay(2000);
+  }
+
+  if(proc_info == READ_FIRMWARECRYPT_FILE){
+    if(proc_message == FIRMWARE_TYPE_ROLLBACK_VERSION){
+      led.setBlack();
+      delay(100);
+      led.blink(0, 0, 255, 10, 100);
+    }else{
+      led.setBlack();
+      delay(100);
+    }
+  }
+
+  if((proc_info == DECRYPT_AND_VERIF_HASH) && (proc_message == VALID_FIRMWARE_HASH)){
+    led.setBlack();
+    delay(100);
+    led.setBlue();
+    delay(100);
+  }
+
+  if((proc_info == DECRYPT_AND_VERIF_HASH) && (proc_message == INVALID_FIRMWARE_HASH)){
+    led.setBlack();
+    delay(100);
+    led.setRed();
+    delay(2000);
+  }
+
+  if((proc_info == DECRYPT_AND_UPDATE_FIRMWARE) && (proc_message == UPDATE_COMPLETE)){
+    led.setBlack();
+    delay(100);
+    led.setBlue();
+    delay(2000);
+    led.setBlack();
+    delay(100);
+  }
+
+  if((proc_info == REMOVE_SDCARD) && (proc_message == WAITING_REMOVE_SDCARD)){
+    led.rainbow(10);
+  }
+
+  if((proc_info == REMOVE_SDCARD) && (proc_message == SDCARD_REMOVED)){
+    led.setBlack();
+    delay(1000);
+  }
+}
+
 void firmwareCryptTask(void * pvParameters){
   /*
   Spesifikasi :
@@ -458,7 +576,10 @@ void firmwareCryptTask(void * pvParameters){
 
   while(true){
     can_restart = false;
+    Serial.println("Update");
     firmware_update.handleUpdate();
+    Serial.println("Rollback");
+    firmware_update.handleRollback();
     can_restart = true;
     delay(1000);
   }
@@ -479,9 +600,17 @@ void setup() {
   interrupt_update = false;
 
   randomSeed(micros()); //Inisialisasi random
+
   pengaturan.begin();
+  if(pengaturan.readUsername() == ""){
+    pengaturan.writeUsername("admin");
+  }
+  if(pengaturan.readPassword() == ""){
+    pengaturan.writePassword("admin");
+  }
+
   firmware_update.setDebugMode(true);
-  firmware_update.setCallbackProcess(callbackProcess); 
+  firmware_update.setCallbackProcess(callbackUpdateProcess, callbackRollbackProcess); 
   xTaskCreatePinnedToCore(firmwareCryptTask, "firmware_crypt_task", 10000, NULL, 1, &firmware_crypt_task, 1);
   
   if(jumper.read() == HIGH){
@@ -492,6 +621,7 @@ void setup() {
     MQTT.setCallback(callback);
     execute_main = true;
   }else{
+    led.blink(125, 0, 125, 10, 100);
     WiFi.softAP(ap_ssid, ap_password);
     IPAddress myIP = WiFi.softAPIP();
     Serial.print("AP IP address: ");

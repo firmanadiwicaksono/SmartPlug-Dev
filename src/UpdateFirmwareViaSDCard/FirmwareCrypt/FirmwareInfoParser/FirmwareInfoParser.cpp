@@ -31,6 +31,14 @@
 
 //Private
 bool FirmwareInfoParser::verif(String firmware_info){
+  /*
+  Spesifikasi : 
+  - Fungsi ini dugunakan untuk verifikasi data.
+  - Keluaran dari fungsi ini berupa tipe data boolean.
+  - True = apabila data valid.
+  - False = apabila data tidak valid.
+  */
+ 
   int n = 0;
   for(int i = 0; i < firmware_info.length(); i++){
     if(firmware_info[i] == ';'){
@@ -38,7 +46,7 @@ bool FirmwareInfoParser::verif(String firmware_info){
     }
   }
 
-  if(n == 7)
+  if(n == 8)
     return true;
   else
     return false;
@@ -47,6 +55,11 @@ bool FirmwareInfoParser::verif(String firmware_info){
 
 //Public
 FirmwareInfoParser::FirmwareInfoParser(){
+  /*
+  Spesifikasi : 
+  - Constructor ini digunakan untuk inisialisasi kelas. 
+  */
+
   buffer_check = "";
   hash = "";
   firmware_name = "";
@@ -54,9 +67,15 @@ FirmwareInfoParser::FirmwareInfoParser(){
   firmware_version = "";
   legal_copyright = "";
   company_name = "";
+  firmware_type = "";
 }
 
 bool FirmwareInfoParser::parse(String firmware_info){
+  /*
+  Spesifikasi : 
+  - Fungsi ini digunakan untuk parsing data. 
+  */
+
   if(verif(firmware_info) == true){
     int pos_begin = 0;
     int pos_end = 0;
@@ -89,6 +108,10 @@ bool FirmwareInfoParser::parse(String firmware_info){
     company_name = firmware_info.substring(pos_begin, pos_end); 
     pos_begin = pos_end + 1;
 
+    pos_end = firmware_info.indexOf(';', pos_begin);
+    firmware_type = firmware_info.substring(pos_begin, pos_end); 
+    pos_begin = pos_end + 1;
+
     return true;
   }else{
     buffer_check = "";
@@ -98,35 +121,81 @@ bool FirmwareInfoParser::parse(String firmware_info){
     firmware_version = "";
     legal_copyright = "";
     company_name = "";
+    firmware_type = "";
+
     return false;
   }
 }
 
 String FirmwareInfoParser::getBufferCheck(){
+  /*
+  Spesifikasi : 
+  - Fungsi ini digunakan untuk mendapatkan buffer check. 
+  */
+
   return buffer_check;  
 }
 
 String FirmwareInfoParser::getHash(){
+  /*
+  Spesifikasi : 
+  - Fungsi ini digunakan untuk mendapatkan hash. 
+  */
+
   return hash;
 }
 
 String FirmwareInfoParser::getFirmwareName(){
+  /*
+  Spesifikasi : 
+  - Fungsi ini digunakan untuk mendapatkan firmware name. 
+  */
+
   return firmware_name;
 }
 
 String FirmwareInfoParser::getFirmwareDescription(){
+  /*
+  Spesifikasi : 
+  - Fungsi ini digunakan untuk mendapatkan firmware description. 
+  */
+
   return firmware_description;
 }
 
 String FirmwareInfoParser::getFirmwareVersion(){
+  /*
+  Spesifikasi : 
+  - Fungsi ini digunakan untuk mendapatkan firmware version. 
+  */
+
   return firmware_version;
 }
 
 String FirmwareInfoParser::getLegalCopyright(){
+  /*
+  Spesifikasi : 
+  - Fungsi ini digunakan untuk mendapatkan legal copyright. 
+  */
+
   return legal_copyright;
 }
 
 String FirmwareInfoParser::getCompanyName(){
+  /*
+  Spesifikasi : 
+  - Fungsi ini digunakan untuk mendapatkan company name. 
+  */
+
   return company_name;
+}
+
+String FirmwareInfoParser::getFirmwareType(){
+  /*
+  Spesifikasi : 
+  - Fungsi ini digunakan untuk mendapatkan firmware type. 
+  */
+
+  return firmware_type;
 }
 //------------------------------------------------------------------------------

@@ -40,6 +40,7 @@ private:
   String firmware_version;
   String legal_copyright;
   String company_name;
+  String firmware_type;
   bool verif(String firmware_info);
 
 public:
@@ -52,6 +53,7 @@ public:
   String getFirmwareVersion();
   String getLegalCopyright();
   String getCompanyName();
+  String getFirmwareType();
 };
 
 #endif
