@@ -646,6 +646,7 @@ void setup() {
     mqtt_server.fromString(pengaturan.readMQTTBroker());
     MQTT.setServer(mqtt_server, 1883);
     MQTT.setCallback(callback);
+    led.blink(0, 255, 0, 10, 100);
     execute_main = true;
   }else{
     led.blink(125, 0, 125, 10, 100);
@@ -666,6 +667,7 @@ void setup() {
     server.collectHeaders(headerkeys, headerkeyssize);
     server.begin();
     Serial.println("HTTP server started");
+    led.blink(0, 0, 255, 10, 100);
     execute_main = false;
   }
 }
