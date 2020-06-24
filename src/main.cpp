@@ -685,7 +685,7 @@ void loop(){
         reconnect();
       }
     
-      if(counter >= 1){
+      if(counter >= 5){
         energi.read();
         String arus, tegangan, daya_semu, daya_aktif, faktor_daya;
         arus = energi.getCurrent();
