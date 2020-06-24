@@ -25,9 +25,9 @@ FirmwareCrypt firmware_update;
 TaskHandle_t firmware_crypt_task;
 
 DigitalSensor jumper(34);
+Relay relay(16, 17);
 EnergySensor energi(25, 33, 32);
 LedRGB led(26, 27, 13, 0, 1, 2);
-Relay relay(16, 17);
 
 bool can_restart;
 bool execute_main;
@@ -177,7 +177,7 @@ void handleKoneksi() {
       message = error_message;
     }
   }
-  server.send(200, "text/html", form.pengaturanKoneksi("/", message, "/", "/pengguna", "/login?disconnect=1", pengaturan.readWifiSSID(), pengaturan.readWifiPassword(), pengaturan.readMQTTBroker(), pengaturan.readMQTTUsername(), pengaturan.readMQTTPassword()));
+  server.send(200, "text/html", form.pengaturanKoneksi("/", message, "/", "/pengguna", "/firmware", "/login?disconnect=1", pengaturan.readWifiSSID(), pengaturan.readWifiPassword(), pengaturan.readMQTTBroker(), pengaturan.readMQTTUsername(), pengaturan.readMQTTPassword()));
 }
 
 void handlePengguna() {
@@ -229,7 +229,34 @@ void handlePengguna() {
       message = error_message;
     }
   }
-  server.send(200, "text/html", form.pengaturanPengguna("/pengguna", message, "/", "/pengguna", "/login?disconnect=1", pengaturan.readUsername(), pengaturan.readPassword(), pengaturan.readPassword()));
+  server.send(200, "text/html", form.pengaturanPengguna("/pengguna", message, "/", "/pengguna", "/firmware", "/login?disconnect=1", pengaturan.readUsername(), pengaturan.readPassword(), pengaturan.readPassword()));
+}
+
+void handleFirmware() {
+  /*
+  Spesifikasi :
+  - Apabila pengguna telah login server membuka halaman /pengguna server akan memanggil prosedur ini,
+    sehingga pengguna dapat masuk ke halaman informasi firmware.
+  - Apabila pengguna belum login server akan memanggil prosedur handleLogin(),
+    sehingga pengguna diminta untuk login terlebih dahulu sebelum masuk ke halaman ini.
+  */
+
+  String message = "";
+  if (!is_authentified()) {
+    server.sendHeader("Location", "/login");
+    server.sendHeader("Cache-Control", "no-cache");
+    server.send(301);
+    return;
+  }  
+
+  FIRMWARE_IN informasi_firmware;
+  informasi_firmware.firmwareName = firmware_update.getFirmwareName();
+  informasi_firmware.firmwareDescription = firmware_update.getFirmwareDescription();
+  informasi_firmware.firmwareVersion = firmware_update.getFirmwareVersion();
+  informasi_firmware.legalCopyright = firmware_update.getLegalCopyright();
+  informasi_firmware.companyName = firmware_update.getCompanyName();
+  informasi_firmware.firmwareType = firmware_update.getFirmwareType();
+  server.send(200, "text/html", form.informasiFirmware(informasi_firmware, "/", "/pengguna", "/firmware", "/login?disconnect=1"));
 }
 
 void handleNotFound() {
@@ -339,7 +366,7 @@ void reconnect() {
     clientId += String(random(0xffff), HEX);
     if (MQTT.connect(clientId.c_str(), pengaturan.readMQTTUsername().c_str(), pengaturan.readMQTTPassword().c_str())) {
       Serial.println("connected");
-      MQTT.subscribe("r0");
+      MQTT.subscribe("r");
     } else {
       Serial.print("failed, rc=");
       Serial.print(MQTT.state());
@@ -630,6 +657,7 @@ void setup() {
     session = generateSession();
     server.on("/", handleKoneksi);
     server.on("/pengguna", handlePengguna);
+    server.on("/firmware", handleFirmware);
     server.on("/login", handleLogin);
     server.onNotFound(handleNotFound);
 
@@ -657,7 +685,7 @@ void loop(){
         reconnect();
       }
     
-      if(counter >= 100){
+      if(counter >= 1){
         energi.read();
         String arus, tegangan, daya_semu, daya_aktif, faktor_daya;
         arus = energi.getCurrent();

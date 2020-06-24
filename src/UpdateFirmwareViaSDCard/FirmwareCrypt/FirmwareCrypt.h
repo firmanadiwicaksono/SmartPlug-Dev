@@ -84,7 +84,7 @@ public:
   FirmwareInfoParser info;
   FirmwareCrypt();
   String getFirmwareName(); 
-  String getFirmwareDecription();
+  String getFirmwareDescription();
   String getFirmwareVersion();
   String getLegalCopyright();
   String getCompanyName();

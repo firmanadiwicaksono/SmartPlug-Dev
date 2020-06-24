@@ -20,16 +20,16 @@ EnergySensor::EnergySensor(int cfPin, int cf1Pin, int selPin){
   - Constructor ini digunakan untuk konfigurasi awal sensor energi.
   */
 
+  //Untuk kalibrasi
+  Relay relay(16, 17);
+  relay.phase.setClosedCircuit();
+  relay.neutral.setClosedCircuit();
+  //------------------------------------------
+
   sensor.begin(cfPin, cf1Pin, selPin, currentMode, false, pulseTimeout);
   sensor.setResistors(currentResistor, voltageResistorUpstream, voltageResistorDownstream);
-}
 
-void EnergySensor::calibrate(int expectedActivePower, int expectedVoltage){
-  /*
-  Spesifikasi :
-  - Prosedur ini digunakan untuk kalibrasi sensor energi.
-  */
-
+  
   sensor.getActivePower();
 
   sensor.setMode(MODE_CURRENT);
@@ -40,9 +40,24 @@ void EnergySensor::calibrate(int expectedActivePower, int expectedVoltage){
   unblockingDelay(2000);
   sensor.getVoltage();
 
-  sensor.expectedActivePower(expectedActivePower);
-  sensor.expectedVoltage(expectedVoltage);
-  sensor.expectedCurrent((double)expectedActivePower / (double)expectedVoltage);
+  //Untuk kalibrasi
+  // Calibrate using a 60W bulb (pure resistive) on a 230V line
+  sensor.expectedActivePower(14.0);
+  sensor.expectedVoltage(194.0);
+  sensor.expectedCurrent(14.0 / 194.0);
+  Serial.begin(9600);
+
+  Serial.print("[HLW] New current multiplier : "); Serial.println(sensor.getCurrentMultiplier());
+  Serial.print("[HLW] New voltage multiplier : "); Serial.println(sensor.getVoltageMultiplier());
+  Serial.print("[HLW] New power multiplier   : "); Serial.println(sensor.getPowerMultiplier());
+  Serial.println();
+  //-----------------------------------------------------
+
+  //Setelah dilakukan kalibrasi agar nilai kalibrasi tersimpan
+  //sensor.setCurrentMultiplier(0.0);
+  //sensor.setVoltageMultiplier(0.0);
+  //sensor.setPowerMultiplier(0.0);
+  //-----------------------------------------------------
 }
 
 void EnergySensor::read(){
@@ -50,13 +65,17 @@ void EnergySensor::read(){
   Spesifikasi :
   - Prosedur ini digunakan untuk membaca nilai sensor energi.
   */
+  //static unsigned long last = millis();
+  //if ((millis() - last) > 2000) {
+    activePower = sensor.getActivePower();
+    voltage = sensor.getVoltage();
+    current = sensor.getCurrent();
+    
+    apparentPower = voltage * current;
+    powerFactor = activePower / apparentPower;
+    sensor.toggleMode();
+  //}
 
-  activePower = sensor.getActivePower();
-  voltage = sensor.getVoltage();
-  current = sensor.getCurrent();
-  apparentPower = sensor.getApparentPower();
-  powerFactor = sensor.getPowerFactor();
-  sensor.toggleMode();
 }
 
 int EnergySensor::getActivePower(){

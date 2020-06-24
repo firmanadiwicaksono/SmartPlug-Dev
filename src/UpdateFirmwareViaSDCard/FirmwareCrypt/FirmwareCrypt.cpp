@@ -107,7 +107,7 @@ String FirmwareCrypt::getFirmwareName(){
   return firmware_name;
 }
 
-String FirmwareCrypt::getFirmwareDecription(){
+String FirmwareCrypt::getFirmwareDescription(){
   /*
   Spesifikasi :
   - Fungsi ini digunakan untuk menampilkan Firmware Description.

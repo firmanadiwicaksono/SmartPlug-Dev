@@ -14,6 +14,15 @@ enum HTML_FORM_ARG{
   ARG_MQTT_PASSWORD
 };
 
+typedef struct{
+  String firmwareName;
+  String firmwareDescription;
+  String firmwareVersion;
+  String legalCopyright;
+  String companyName;
+  String firmwareType;
+}FIRMWARE_IN;
+
 class HTMLForm{
 private:
   String htmlFormArg[8] = {
@@ -29,8 +38,9 @@ private:
 
 public:
   String login(String target,  String message);
-  String pengaturanKoneksi(String target, String message, String link_pengaturan_koneksi, String link_pengaturan_pengguna, String link_logout, String wifi_ssid, String wifi_password, String mqtt_broker, String mqtt_username, String mqtt_password);
-  String pengaturanPengguna(String target, String message, String link_pengaturan_koneksi, String link_pengaturan_pengguna, String link_logout, String username, String password, String konfirmasi_password);
+  String pengaturanKoneksi(String target, String message, String link_pengaturan_koneksi, String link_pengaturan_pengguna, String link_informasi_firmware, String link_logout, String wifi_ssid, String wifi_password, String mqtt_broker, String mqtt_username, String mqtt_password);
+  String pengaturanPengguna(String target, String message, String link_pengaturan_koneksi, String link_pengaturan_pengguna, String link_informasi_firmware, String link_logout, String username, String password, String konfirmasi_password);
+  String informasiFirmware(FIRMWARE_IN informasi_firmware, String link_pengaturan_koneksi, String link_pengaturan_pengguna, String link_informasi_firmware, String link_logout);
   String getArg(HTML_FORM_ARG arg);
 };
 

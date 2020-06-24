@@ -4,6 +4,10 @@
 #include <Arduino.h>
 #include "../lib/HLW8012/HLW8012.h"
 
+//Untuk Kalibrasi
+#include "Aktuator/Relay/Relay.h"
+//------------------------------------------
+
 class EnergySensor{
 private:
   HLW8012 sensor;
@@ -14,13 +18,12 @@ private:
   const int pulseTimeout = 500000;
   int activePower;
   int voltage;
-  int current;
+  double current;
   double apparentPower;
   double powerFactor;
   void unblockingDelay(int mseconds);
 public:
   EnergySensor(int cfPin, int cf1Pin, int selPin);
-  void calibrate(int expectedActivePower, int expectedVoltage);
   void read();
   int getActivePower();
   int getVoltage();
