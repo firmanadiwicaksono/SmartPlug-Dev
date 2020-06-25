@@ -641,6 +641,16 @@ void setup() {
   xTaskCreatePinnedToCore(firmwareCryptTask, "firmware_crypt_task", 10000, NULL, 1, &firmware_crypt_task, 1);
   
   if(jumper.read() == HIGH){
+    //Untuk kalibrasi sensor energi
+    relay.phase.setClosedCircuit();
+    relay.neutral.setClosedCircuit();
+    energi.calibrate(60, 220);
+    //------------------------------------------------------------------------------
+
+    //Setelah dilakukan kalibrasi sensor energi
+    //energi.setCalibrate(0,0,0);
+    //------------------------------------------------------------------------------
+
     setup_wifi();
     IPAddress mqtt_server;
     mqtt_server.fromString(pengaturan.readMQTTBroker());
@@ -688,6 +698,16 @@ void loop(){
       }
     
       if(counter >= 5){
+        //Untuk kalibrasi sensor energi
+        String _current_multiplier, _voltage_multiplier, _power_multiplier;
+        _current_multiplier = energi.getCurrentMultiplier();
+        _voltage_multiplier = energi.getVoltageMultiplier();
+        _power_multiplier = energi.getPowerMultiplier();
+        MQTT.publish("cm", _current_multiplier.c_str());
+        MQTT.publish("vm", _voltage_multiplier.c_str());
+        MQTT.publish("pm", _power_multiplier.c_str());
+        //------------------------------------------------------------------------------
+
         energi.read();
         String arus, tegangan, daya_semu, daya_aktif, faktor_daya;
         arus = energi.getCurrent();

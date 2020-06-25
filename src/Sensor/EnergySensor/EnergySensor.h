@@ -4,13 +4,12 @@
 #include <Arduino.h>
 #include "../lib/HLW8012/HLW8012.h"
 
-//Untuk Kalibrasi
-#include "Aktuator/Relay/Relay.h"
-//------------------------------------------
-
 class EnergySensor{
 private:
   HLW8012 sensor;
+  double _current_multiplier; // Unit: us/A
+  double _voltage_multiplier; // Unit: us/V
+  double _power_multiplier;   // Unit: us/W
   const int currentMode = HIGH;
   const double currentResistor = 0.001;
   const double voltageResistorUpstream = 2350000;
@@ -24,6 +23,11 @@ private:
   void unblockingDelay(int mseconds);
 public:
   EnergySensor(int cfPin, int cf1Pin, int selPin);
+  void calibrate(int expectedActivePower, int expectedVoltage);
+  double getCurrentMultiplier();
+  double getVoltageMultiplier();
+  double getPowerMultiplier();
+  void setCalibrate(double currentMultiplier, double voltageMultiplier, double powerMultiplier);
   void read();
   int getActivePower();
   int getVoltage();

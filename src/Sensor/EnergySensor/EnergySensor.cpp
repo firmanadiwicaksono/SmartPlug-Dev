@@ -20,16 +20,11 @@ EnergySensor::EnergySensor(int cfPin, int cf1Pin, int selPin){
   - Constructor ini digunakan untuk konfigurasi awal sensor energi.
   */
 
-  //Untuk kalibrasi
-  Relay relay(16, 17);
-  relay.phase.setClosedCircuit();
-  relay.neutral.setClosedCircuit();
-  //------------------------------------------
-
   sensor.begin(cfPin, cf1Pin, selPin, currentMode, false, pulseTimeout);
   sensor.setResistors(currentResistor, voltageResistorUpstream, voltageResistorDownstream);
+}
 
-  
+void EnergySensor::calibrate(int expectedActivePower, int expectedVoltage){
   sensor.getActivePower();
 
   sensor.setMode(MODE_CURRENT);
@@ -40,24 +35,49 @@ EnergySensor::EnergySensor(int cfPin, int cf1Pin, int selPin){
   unblockingDelay(2000);
   sensor.getVoltage();
 
-  //Untuk kalibrasi
-  // Calibrate using a 60W bulb (pure resistive) on a 230V line
-  sensor.expectedActivePower(14.0);
-  sensor.expectedVoltage(194.0);
-  sensor.expectedCurrent(14.0 / 194.0);
-  Serial.begin(9600);
+  sensor.expectedActivePower(expectedActivePower);
+  sensor.expectedVoltage(expectedVoltage);
+  sensor.expectedCurrent((double)expectedActivePower / (double)expectedVoltage);
+  
+  _current_multiplier = sensor.getCurrentMultiplier();
+  _voltage_multiplier = sensor.getVoltageMultiplier();
+  _power_multiplier = sensor.getPowerMultiplier();
+}
 
-  Serial.print("[HLW] New current multiplier : "); Serial.println(sensor.getCurrentMultiplier());
-  Serial.print("[HLW] New voltage multiplier : "); Serial.println(sensor.getVoltageMultiplier());
-  Serial.print("[HLW] New power multiplier   : "); Serial.println(sensor.getPowerMultiplier());
-  Serial.println();
-  //-----------------------------------------------------
+double EnergySensor::getCurrentMultiplier(){
+  /*
+  Spesifikasi :
+  - Fungsi ini digunakan untuk mendapatkan nilai kalibrasi arus
+  */
+  return sensor.getCurrentMultiplier();
+}
 
-  //Setelah dilakukan kalibrasi agar nilai kalibrasi tersimpan
-  //sensor.setCurrentMultiplier(0.0);
-  //sensor.setVoltageMultiplier(0.0);
-  //sensor.setPowerMultiplier(0.0);
-  //-----------------------------------------------------
+double EnergySensor::getVoltageMultiplier(){
+  /*
+  Spesifikasi :
+  - Fungsi ini digunakan untuk mendapatkan nilai kalibrasi tegangan
+  */
+
+  return sensor.getVoltageMultiplier();
+}
+
+double EnergySensor::getPowerMultiplier(){
+  /*
+  Spesifikasi :
+  - Fungsi ini digunakan untuk mendapatkan nilai kalibrasi daya
+  */
+  return getPowerMultiplier();
+}
+
+void EnergySensor::setCalibrate(double currentMultiplier, double voltageMultiplier, double powerMultiplier){
+  /*
+  Spesifikasi :
+  - Prosedur ini digunakan untuk set nilai kalibrasi
+  */
+
+  sensor.setCurrentMultiplier(currentMultiplier);
+  sensor.setVoltageMultiplier(voltageMultiplier);
+  sensor.setPowerMultiplier(powerMultiplier);
 }
 
 void EnergySensor::read(){
