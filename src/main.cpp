@@ -644,6 +644,7 @@ void setup() {
     //Untuk kalibrasi sensor energi
     relay.phase.setClosedCircuit();
     relay.neutral.setClosedCircuit();
+    delay(2000);
     energi.calibrate(60, 220);
     //------------------------------------------------------------------------------
 
