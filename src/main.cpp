@@ -480,6 +480,7 @@ void callbackUpdateProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROCES
 
   if((proc_info == REMOVE_SDCARD) && (proc_message == WAITING_REMOVE_SDCARD)){
     led.rainbow(10);
+    led.blink(0, 255, 0, 10, 100);
   }
 
   if((proc_info == REMOVE_SDCARD) && (proc_message == SDCARD_REMOVED)){
@@ -586,6 +587,7 @@ void callbackRollbackProcess(FIRMWARECRYPT_PROCESS proc_info, FIRMWARECRYPT_PROC
 
   if((proc_info == REMOVE_SDCARD) && (proc_message == WAITING_REMOVE_SDCARD)){
     led.rainbow(10);
+    led.blink(0, 0, 255, 10, 100);
   }
 
   if((proc_info == REMOVE_SDCARD) && (proc_message == SDCARD_REMOVED)){
@@ -636,20 +638,22 @@ void setup() {
     pengaturan.writePassword("admin");
   }
 
-  firmware_update.setDebugMode(true);
   firmware_update.setCallbackProcess(callbackUpdateProcess, callbackRollbackProcess); 
   xTaskCreatePinnedToCore(firmwareCryptTask, "firmware_crypt_task", 10000, NULL, 1, &firmware_crypt_task, 1);
   
   if(jumper.read() == HIGH){
     //Untuk kalibrasi sensor energi
-    relay.phase.setClosedCircuit();
+    /*relay.phase.setClosedCircuit();
     relay.neutral.setClosedCircuit();
     delay(2000);
-    energi.calibrate(60, 220);
+    energi.calibrate(60, 190);
+    delay(2000);
+    relay.phase.setOpenCircuit();
+    relay.neutral.setOpenCircuit();*/
     //------------------------------------------------------------------------------
 
     //Setelah dilakukan kalibrasi sensor energi
-    //energi.setCalibrate(0,0,0);
+    energi.setCalibrate(12100.42, 436185.04, 9403283.40);
     //------------------------------------------------------------------------------
 
     setup_wifi();
@@ -698,17 +702,16 @@ void loop(){
         reconnect();
       }
     
-      if(counter >= 5){
+      if(counter >= 1){
         //Untuk kalibrasi sensor energi
-        String _current_multiplier, _voltage_multiplier, _power_multiplier;
+        /*String _current_multiplier, _voltage_multiplier, _power_multiplier;
         _current_multiplier = energi.getCurrentMultiplier();
         _voltage_multiplier = energi.getVoltageMultiplier();
         _power_multiplier = energi.getPowerMultiplier();
         MQTT.publish("cm", _current_multiplier.c_str());
         MQTT.publish("vm", _voltage_multiplier.c_str());
-        MQTT.publish("pm", _power_multiplier.c_str());
+        MQTT.publish("pm", _power_multiplier.c_str());*/
         //------------------------------------------------------------------------------
-
         energi.read();
         String arus, tegangan, daya_semu, daya_aktif, faktor_daya;
         arus = energi.getCurrent();

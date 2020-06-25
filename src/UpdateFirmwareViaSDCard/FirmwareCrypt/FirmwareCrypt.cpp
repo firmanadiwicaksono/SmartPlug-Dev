@@ -88,7 +88,7 @@ FirmwareCrypt::FirmwareCrypt(){
   - Constructor ini digukanan untuk inisialiasi kelas.
   */
 
-  setDebugMode(false);
+  debug_mode = true;
   setCallbackProcess(NULL, NULL);
 }
 
@@ -180,17 +180,6 @@ String FirmwareCrypt::getFirmwareType(){
   }
   
   return firmware_type;
-}
-
-void FirmwareCrypt::setDebugMode(bool debug_mode){
-  /*
-  Spesifikasi :
-  - Prosedur ini digunakan untuk pengaturan mode debug.
-  - Apabila debug_mode = true perangkat menampilkan pesan debug ke Serial Monitor.
-  - Apabila debug_mode = false perangkat tidak menampilkan pesan debug ke Serial Monitor.
-  */
-
-  this->debug_mode = debug_mode;  
 }
 
 void FirmwareCrypt::setCallbackProcess(FIRMWARECRYPT_CALLBACK_UPDATE_SIGNATURE, FIRMWARECRYPT_CALLBACK_ROLLBACK_SIGNATURE){

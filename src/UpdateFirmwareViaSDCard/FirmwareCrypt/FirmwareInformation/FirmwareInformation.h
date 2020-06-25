@@ -43,6 +43,6 @@ const String firmware_description = "Home Automation Untuk Monitoring Penggunaan
 const String firmware_version = "0.0.1";
 const String legal_copyright = "Copyright (c) Firman Adi Wicaksono 2020";
 const String company_name = "FirmanDev";
-const String firmware_type = "Rollback Version";
+const String firmware_type = "Update Version";
 
 #endif

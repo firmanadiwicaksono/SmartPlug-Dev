@@ -89,7 +89,6 @@ public:
   String getLegalCopyright();
   String getCompanyName();
   String getFirmwareType();
-  void setDebugMode(bool debug_mode);
   void setCallbackProcess(FIRMWARECRYPT_CALLBACK_UPDATE_SIGNATURE, FIRMWARECRYPT_CALLBACK_ROLLBACK_SIGNATURE);
   void handleUpdate();
   void handleRollback();

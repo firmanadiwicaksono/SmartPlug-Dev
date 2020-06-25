@@ -66,7 +66,7 @@ double EnergySensor::getPowerMultiplier(){
   Spesifikasi :
   - Fungsi ini digunakan untuk mendapatkan nilai kalibrasi daya
   */
-  return getPowerMultiplier();
+  return sensor.getPowerMultiplier();
 }
 
 void EnergySensor::setCalibrate(double currentMultiplier, double voltageMultiplier, double powerMultiplier){
