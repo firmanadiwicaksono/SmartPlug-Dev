@@ -676,7 +676,7 @@ void loop(){
   /*
   Spesifikasi :
   - Prosedur ini adalah program utama.
-  - Prosedur ini dieksekusi secara terus-menerus dengan interval 100 milli detik.
+  - Prosedur ini dieksekusi secara terus-menerus dengan interval 10 milli detik.
   */
 
   if(execute_main == true){
@@ -692,7 +692,7 @@ void loop(){
           ESP.restart();
         }
       }
-      delay(100);  
+      delay(10);  
     }
   }else{
     while(true){
