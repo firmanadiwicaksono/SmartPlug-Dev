@@ -713,11 +713,17 @@ void loop(){
         MQTT.publish("pm", _power_multiplier.c_str());*/
         //------------------------------------------------------------------------------
         energi.read();
-        String arus, tegangan;
+        String arus, tegangan, daya_semu, daya_aktif, faktor_daya;
         arus = energi.getCurrent();
         tegangan = energi.getVoltage();
+        daya_semu = energi.getApparentPower();
+        daya_aktif = energi.getActivePower();
+        faktor_daya = energi.getPowerFactor();
         MQTT.publish("i", arus.c_str());
         MQTT.publish("v", tegangan.c_str());
+        MQTT.publish("va", daya_semu.c_str());
+        MQTT.publish("w", daya_aktif.c_str());
+        MQTT.publish("pf", faktor_daya.c_str());
         counter = 0;
       }else{
         counter++;
