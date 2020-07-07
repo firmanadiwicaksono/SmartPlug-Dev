@@ -623,7 +623,7 @@ void setup() {
    - Prosedur ini digunakan untuk konfigurasi Input/Output perangkat.
   */
  
-  led.rainbow(10);
+  led.Rainbow(10);
   Serial.begin(9600);
 
   interrupt_update = false;
