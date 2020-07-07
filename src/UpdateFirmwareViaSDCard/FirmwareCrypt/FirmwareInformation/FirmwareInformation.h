@@ -38,11 +38,12 @@ const byte update_encrypt_iv[16] = {132, 230, 200, 193, 154, 41, 195, 157, 93, 1
 const byte rollback_encrypt_key[32] = {166, 158, 165, 184, 59, 213, 59, 128, 242, 176, 212, 185, 74, 210, 74, 235, 247, 21, 200, 93, 250, 54, 212, 63, 163, 19, 83, 121, 182, 230, 141, 106};
 const byte rollback_encrypt_iv[16] = {58, 156, 103, 55, 81, 70, 211, 236, 152, 83, 157, 222, 151, 213, 152, 133};
 const String buffer_check = "E66CAF78B29353B6C006A2BA3DC32802CB4EF43B748096F3DA8E7418F29E92DC";
-const String firmware_name = "Smart Plug Release 2";
+const String firmware_name = "Smart Plug Release 3";
 const String firmware_description = "Home Automation Untuk Monitoring Penggunaan Energi";
-const String firmware_version = "0.0.2";
+const String firmware_version = "0.0.3";
 const String legal_copyright = "Copyright (c) Firman Adi Wicaksono 2020";
 const String company_name = "FirmanDev";
-const String firmware_type = "Rollback Version";
+const String firmware_type = "Update Version";
+
 
 #endif
