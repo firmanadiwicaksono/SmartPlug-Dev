@@ -98,18 +98,6 @@ void EnergySensor::read(){
 
 }
 
-int EnergySensor::getActivePower(){
-  /*
-  - Fungsi ini digunakan untuk mendapatkan daya aktif (W).
-  - Keluaran dari fungsi ini adalah tipe data integer.
-  - Daya dengan satuan Joule/detik  atau  watt disebut sebagai daya aktif. Simbolnya adalah P.
-    Daya aktif adalah daya sebenarnya yang dibutuhkan oleh beban. Daya aktif dihitung dengan rumus:
-    P = |V| × |I| × cos φ
-  */
-
-  return activePower;
-}
-
 int EnergySensor::getVoltage(){
   /*
   - Fungsi ini digunakan untuk mendapatkan nilai tegangan (V).
@@ -126,25 +114,5 @@ double EnergySensor::getCurrent(){
   */
 
   return current;    
-}
-
-int EnergySensor::getApparentPower(){
-  /*
-  - Fungsi ini digunakan untuk mendapatkan daya semu (VA).
-  - Keluaran dari fungsi ini adalah tipe data double.
-  - Daya semu atau daya total (S), ataupun juga dikenal dalam Bahasa Inggris Apparent Power,
-    adalah hasil perkalian antara tegangan efektif (Vrms) dengan arus efektif (Irms).
-  */
-
-  return apparentPower;    
-}
-
-double EnergySensor::getPowerFactor(){
-  /*
-  - Fungsi ini digunakan untuk mendapatkan faktor daya (0.0-1.0).
-  - Keluaran dari fungsi ini adalah tipe data double.
-  */
-
-  return powerFactor;    
 }
 //------------------------------------------------------------------------------

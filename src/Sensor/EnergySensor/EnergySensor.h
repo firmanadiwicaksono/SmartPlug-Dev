@@ -29,11 +29,8 @@ public:
   double getPowerMultiplier();
   void setCalibrate(double currentMultiplier, double voltageMultiplier, double powerMultiplier);
   void read();
-  int getActivePower();
   int getVoltage();
   double getCurrent();
-  int getApparentPower();
-  double getPowerFactor();
 };
 
 #endif
