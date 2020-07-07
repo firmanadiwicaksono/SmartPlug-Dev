@@ -30,7 +30,7 @@ EnergySensor energi(25, 33, 32);
 LedRGB led(26, 27, 13, 0, 1, 2);
 
 bool can_restart;
-bool execute_main;
+
 bool interrupt_update;
 int counter = 0;
 
