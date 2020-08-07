@@ -7,7 +7,6 @@
 #include "PengaturanPerangkat/HTMLForm/HTMLForm.h"
 #include "PengaturanPerangkat/EEPROMData/EEPROMData.h"
 #include "Sensor/DigitalSensor/DigitalSensor.h"
-#include "Sensor/EnergySensor/EnergySensor.h"
 #include "Aktuator/LedRGB/LedRGB.h"
 #include "Aktuator/Relay/Relay.h"
 
@@ -26,13 +25,11 @@ TaskHandle_t firmware_crypt_task;
 
 DigitalSensor jumper(34);
 Relay relay(16, 17);
-EnergySensor energi(25, 33, 32);
 LedRGB led(26, 27, 13, 0, 1, 2);
 
 bool can_restart;
 bool execute_main;
 bool interrupt_update;
-int counter = 0;
 
 String session;
 
@@ -642,20 +639,6 @@ void setup() {
   xTaskCreatePinnedToCore(firmwareCryptTask, "firmware_crypt_task", 10000, NULL, 1, &firmware_crypt_task, 1);
   
   if(jumper.read() == HIGH){
-    //Untuk kalibrasi sensor energi
-    /*relay.phase.setClosedCircuit();
-    relay.neutral.setClosedCircuit();
-    delay(2000);
-    energi.calibrate(60, 190);
-    delay(2000);
-    relay.phase.setOpenCircuit();
-    relay.neutral.setOpenCircuit();*/
-    //------------------------------------------------------------------------------
-
-    //Setelah dilakukan kalibrasi sensor energi
-    energi.setCalibrate(12100.42, 436185.04, 9403283.40);
-    //------------------------------------------------------------------------------
-
     setup_wifi();
     IPAddress mqtt_server;
     mqtt_server.fromString(pengaturan.readMQTTBroker());
@@ -702,26 +685,6 @@ void loop(){
         reconnect();
       }
     
-      if(counter >= 1){
-        //Untuk kalibrasi sensor energi
-        /*String _current_multiplier, _voltage_multiplier, _power_multiplier;
-        _current_multiplier = energi.getCurrentMultiplier();
-        _voltage_multiplier = energi.getVoltageMultiplier();
-        _power_multiplier = energi.getPowerMultiplier();
-        MQTT.publish("cm", _current_multiplier.c_str());
-        MQTT.publish("vm", _voltage_multiplier.c_str());
-        MQTT.publish("pm", _power_multiplier.c_str());*/
-        //------------------------------------------------------------------------------
-        energi.read();
-        String arus, tegangan;
-        arus = energi.getCurrent();
-        tegangan = energi.getVoltage();
-        MQTT.publish("i", arus.c_str());
-        MQTT.publish("v", tegangan.c_str());
-        counter = 0;
-      }else{
-        counter++;
-      }
       MQTT.loop();
 
       if(jumper.read() == LOW){
